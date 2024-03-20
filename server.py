@@ -22,7 +22,40 @@ def handle_client(commS,address):
         print("the message from {address} is {msg}")
 
     commS.close()
-
+    
+class HttpObj:
+        def __init__(self,method,uri,version) -> None:
+            self.type = type
+            self.target = uri
+            self.version = version
+    
+def parse_http(msg):
+    
+    http = {
+        "GET" : "",
+        "DELETE" : "",
+        "PUT" : "",
+        "POST" : "",
+        
+    }
+     
+     
+    request_line, headers_body = msg.spilt("\r\n")
+    
+    method , uri , version = request_line.split(" ")
+    
+    if method not in http:
+        return None
+    
+    
+    
+    
+    httpObj = HttpObj(method,uri,version)
+    
+    return httpObj
+    
+    
+    
 
 def start():
     s.listen(5)
