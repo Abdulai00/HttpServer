@@ -3,8 +3,6 @@ import ssl
 import threading
 import requests
 
-HEADERSIZE = 10
-
 class HttpObj:
         def __init__(self,method,uri,version) -> None:
             self.type = method
@@ -15,6 +13,12 @@ class HttpObj:
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s.bind((socket.gethostname(),1234))
+
+PrivateKey = "C:\\Safe\\bahproxy.com.key"
+Certification = "C:\\Safe\\bahproxy.com.pem"
+
+context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
+context.load_cert_chain(certfile=Certification,keyfile=PrivateKey)
 
 def handle_client(commS, address):
     print(f"New connection to {address}")
@@ -137,11 +141,11 @@ def start():
     s.listen(5)
     while True:
         commS , address = s.accept()
-
-        thread = threading.Thread(target = handle_client, args = (commS,address))
+        tls_comms = context.wrap_socket(commS,server_side=True)
+        thread = threading.Thread(target = handle_client, args = (tls_comms,address))
         thread.start()
         
         print(f"active connections:{threading.active_count() -1}")
 
-print("starting server")
+print("Listening on Port 1234")
 start()
