@@ -12,10 +12,11 @@ class HttpObj:
             self.body = None
 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-s.bind((socket.gethostname(),1234))
+s.bind(("0.0.0.0",443))
 
-PrivateKey = "C:\\Safe\\bahproxy.com.key"
-Certification = "C:\\Safe\\bahproxy.com.pem"
+PrivateKey = "/home/ec2-user/Server/HttpServer/bahproxy.com.key"
+Certification = "/home/ec2-user/Server/HttpServer/bahproxy.com.pem"
+
 
 context = ssl.SSLContext(ssl.PROTOCOL_TLS_SERVER)
 context.load_cert_chain(certfile=Certification,keyfile=PrivateKey)
@@ -147,5 +148,5 @@ def start():
         
         print(f"active connections:{threading.active_count() -1}")
 
-print("Listening on Port 1234")
+print("Listening for incoming traffic")
 start()
